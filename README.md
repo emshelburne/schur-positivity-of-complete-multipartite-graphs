@@ -1,4 +1,3 @@
-
 # Schur-Positivity of Complete Multipartite Graphs
 
 This repository accompanies the paper:
@@ -8,12 +7,12 @@ Ethan Shelburne and Steph van Willigenburg
 
 ## Overview
 
-We classify complete multipartite graphs according to whether their chromatic symmetric functions are Schur-positive. Using special rim hook \( G \)-tabloids and combinatorial arguments, we extend known classifications for bipartite and tripartite graphs to all complete multipartite graphs.
+We classify complete multipartite graphs according to whether their chromatic symmetric functions are Schur-positive. Using special rim hook $G$-tabloids and combinatorial arguments, we extend known classifications for bipartite and tripartite graphs to all complete multipartite graphs.
 
-The main result shows that a complete multipartite graph \( K_\lambda \) (with at least two parts) is Schur-positive if and only if:
+The main result shows that a complete multipartite graph $K_\lambda$ (with at least two parts) is Schur-positive if and only if:
 
-- All parts have size 1 or 2, or  
-- \( \lambda = (3, 2^\beta) \) for \( \beta \ge 1 \).
+- All parts have size $1$ or $2$, or  
+- $\lambda = (3,2^\beta)$ for $\beta \ge 1$.
 
 ## Contents
 
@@ -25,5 +24,3 @@ The main result shows that a complete multipartite graph \( K_\lambda \) (with a
 ## Computational Notes
 
 This repository includes code used to verify formulas for Schur coefficients and to compute quantities such as the number of spanning non-increasing sequences in incomparability graphs.
-
-
