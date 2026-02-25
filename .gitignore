@@ -1,0 +1,32 @@
+##################################
+# LaTeX build files
+##################################
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.lof
+*.lot
+*.na
+*.snm
+
+##################################
+# Python
+##################################
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+
+##################################
+# Jupyter Notebooks
+##################################
+
+# Checkpoints (auto-generated)
+.ipynb_checkpoints/

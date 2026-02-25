@@ -1,0 +1,1157 @@
+\documentclass[12pt]{amsart}
+
+%=========================================================
+% Encoding & Fonts
+%=========================================================
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc} % If your file is UTF-8, change to: \usepackage[utf8]{inputenc}
+
+% Text font
+\usepackage{palatino}
+
+% Math fonts / alphabets
+\usepackage[mathcal]{euler}   % Euler calligraphic (for \mathcal)
+
+%=========================================================
+% Core AMS math / theorem tools
+%=========================================================
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}        % extends amsmath (\coloneqq, etc.)
+\allowdisplaybreaks
+
+%=========================================================
+% Bibliography
+%=========================================================
+\usepackage[numbers,sort&compress]{natbib}
+
+%=========================================================
+% Layout & Spacing
+%=========================================================
+\usepackage[left=1.25in, bottom=1in, right=1in, top=1in,
+            paperwidth=8.5in, paperheight=11in]{geometry}
+\usepackage{setspace} % \doublespacing if desired
+
+%=========================================================
+% Lists
+%=========================================================
+\usepackage[shortlabels]{enumitem}
+
+%=========================================================
+% Tables / Floats / Landscape pages
+%=========================================================
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{afterpage}
+\usepackage{float}
+\usepackage{pdflscape}
+
+%=========================================================
+% Graphics / EPS tools
+%=========================================================
+\usepackage{graphicx}
+\usepackage{epsfig}
+\usepackage{epstopdf}
+\usepackage{psfrag}
+
+%=========================================================
+% TikZ / Commutative diagrams / Young tableaux
+%=========================================================
+\usepackage{tikz}
+\usetikzlibrary{calc,shapes.geometric}
+\usepackage{tikz-cd}
+\usepackage{ytableau}
+\usepackage{varwidth}
+
+%=========================================================
+% XY-pic (diagrams)
+%=========================================================
+\usepackage{xy}
+\xyoption{all}
+
+%=========================================================
+% Misc math / symbols
+%=========================================================
+\usepackage{slashed}
+\usepackage{mathdots}   % reverse diagonal dots
+
+%=========================================================
+% Notes / Dates / Underlines
+%=========================================================
+\usepackage{marginnote}
+\usepackage[ddmmyyyy]{datetime}
+\usepackage[normalem]{ulem}   % \uline etc. (keeps \emph italics)
+
+%=========================================================
+% Colors & Hyperlinks  (load hyperref late)
+%=========================================================
+\usepackage{xcolor}
+
+\usepackage[unicode=true,
+  linktocpage,
+  linkbordercolor={0.5 0.5 1},
+  citebordercolor={0.5 1 0.5},
+  linkcolor=blue]{hyperref}
+
+%=========================================================
+% Custom Commands
+%=========================================================
+
+% Big dot
+\makeatletter
+\newcommand*\bigcdot{\mathpalette\bigcdot@{.5}}
+\newcommand*\bigcdot@[2]{\mathbin{\vcenter{\hbox{\scalebox{#2}{$\m@th#1\bullet$}}}}}
+\makeatother
+
+% Number sets
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\PP}{\mathbb{P}}
+
+% Text separators
+\newcommand{\so}{\qquad\text{ so }\qquad}
+\newcommand{\andd}{\qquad\text{ and }\qquad}
+\newcommand{\ifff}{\qquad\text{ if }\qquad}
+\newcommand{\orr}{\qquad\text{ or }\qquad}
+\newcommand{\when}{\qquad\text{ when }\qquad}
+\newcommand{\st}{\qquad\text{ such that }\qquad}
+\newcommand{\where}{\qquad\text{ where }\qquad}
+
+% Big chi
+\newcommand*{\bigchi}{\mbox{\Large$\chi$}}
+
+% Absolute value
+\newcommand{\abs}[1]{\lvert#1\rvert}
+
+% Placeholder box
+\newcommand{\blankbox}[2]{%
+  \parbox{\columnwidth}{\centering
+    \setlength{\fboxsep}{0pt}%
+    \fbox{\raisebox{0pt}[#2]{\hspace{#1}}}%
+  }%
+}
+
+%=========================================================
+% Theorem Environments
+%=========================================================
+\swapnumbers
+\numberwithin{equation}{section}
+
+\theoremstyle{plain}
+\newtheorem*{theorem*}{Theorem}
+\newtheorem*{lemma*}{Lemma}
+\newtheorem{theorem}[equation]{Theorem}
+\newtheorem{lemma}[equation]{Lemma}
+\newtheorem{proposition}[equation]{Proposition}
+\newtheorem{corollary}[equation]{Corollary}
+\newtheorem{conjecture}[equation]{Conjecture}
+
+\theoremstyle{definition}
+\newtheorem{definition}[equation]{Definition}
+\newtheorem*{definition*}{Definition}
+\newtheorem{example}[equation]{Example}
+\newtheorem{notation}[equation]{Notation}
+\newtheorem*{notation*}{Notation}
+
+\theoremstyle{remark}
+\newtheorem{remark}[equation]{Remark}
+\newtheorem*{remark*}{Remark}
+
+
+
+\begin{document}
+
+\title{A Schur-Positivity Classification for
+Complete Multipartite Graphs}
+
+
+\author{Ethan Shelburne}
+\author{Steph van Willigenburg}
+
+
+\begin{abstract}
+% A graph is Schur-positive if its chromatic symmetric function expands nonnegatively
+% in the Schur basis. All claw-free graphs are conjectured to be Schur-positive. We
+% introduce a combinatorial object corresponding to a graph G, called a special rim hook
+% G-tabloid, which is a variation on the special rim hook tabloid. These objects can be
+% employed to compute any Schur coefficient of the chromatic symmetric function of a
+% graph. Special rim hook tabloids have previously been used to prove the non-Schur-positivity of some graphs. We construct sign-reversing maps on these special rim
+% hook G-tabloids to prove that a family of claw-free graphs called generalized nets are
+% Schur-positive. Thus, we demonstrate a new method for proving the Schur-positivity
+% of graphs, which has the potential to be applied to make further progress toward the
+% aforementioned conjecture.
+\end{abstract}
+
+\maketitle
+
+
+
+\section{Introduction}
+
+In 1995, Richard Stanley extended the study of graph colorings to the realm of symmetric functions by introducing the chromatic symmetric function \cite{stan_95}. This innovation sparked extensive research into chromatic symmetric functions and related power series, uncovering deep connections to representation theory and algebraic structures. Symmetric functions that expand nonnegatively in the elementary basis or Schur basis often possess significant algebraic or combinatorial properties, including meaningful interpretations of their coefficients. For instance, symmetric functions with nonnegative Schur expansions correspond to the Frobenius image of representations of the symmetric group \cite{sym_group}. A central question posed in \cite{stan_95} seeks to classify graphs that are Schur-positive or e-positive, leading to three major conjectures that continue to shape the field.
+
+
+\begin{enumerate}
+
+\item (The Stanley-Stembridge Conjecture, \cite{stan_93}): All claw-free incomparability graphs are e-positive.
+
+\item (The Nonisomorphic Tree Conjecture, \cite{stan_95}): No two nonisomorphic trees have the same chromatic symmetric function.
+
+\item (The Claw-free Conjecture, \cite{stan_98}): All claw-free graphs are Schur-positive.
+
+\end{enumerate}
+
+
+A proof of the Stanley-Stembridge conjecture was announced in \cite{hikita24}. Additionally, various subfamilies of claw-free incomparability graphs have been shown to satisfy this conjecture in \cite{GebSag01}, \cite{Dahl18}, \cite{centered_at_vertex}, among others. The Nonisomorphic Tree Conjecture has been computationally verified for trees with up to 29 vertices in \cite{trees29}, and further progress on this conjecture is detailed in \cite{mar_mor}, \cite{OrSc14}, and \cite{foley22}, for instance. Vesselin Gasharov advanced the Claw-free Conjecture by demonstrating that all claw-free incomparability graphs are Schur-positive in \cite{gash_96}. David Wang and Monica Wang provided a combinatorial formula for determining the Schur coefficients of chromatic symmetric functions, which facilitated various results, including a classification of the Schur-positivity of complete bipartite and tripartite graphs \cite{WW2020}. The authors derived an alternate version of the formula from \cite{WW2020} in terms of a new combinatorial object corresponding to a graph $G$, named special rim hook $G$-tabloids \cite{gen_nets}. The authors then used this formula to prove that all generalized net graphs are Schur-positive.
+
+
+We employ the aforementioned formula, as well as other combinatorial arguments, to extend the result from \cite{WW2020} and determine a Schur-positivity classification for all complete multipartite graphs. First, we exploit the property of niceness, a necessary feature of any Schur-positive graph, as shown in \cite{stan_98}. We then build on the arguments from \cite{WW2020} to show that certain types of partitions, which are called balanced, always correspond to graphs which are not nice and therefore not Schur-positive. We address the remaining cases by explicitly formulating the coefficients of the chromatic symmetric functions of certain complete multipartite graphs. In order to do this, we also show these coefficients can be computed in a simpler way in the case where the underlying graph is a complete multipartite graph.
+
+
+Section \ref{sect:prelims} covers the required preliminaries. Section \ref{sect:srh_G_tabs} introduces the key combinatorial object, that is, the special rim hook $G$-tabloid. Lastly, Section \ref{sect:comp_multi_graphs} includes several results which together provide a classification for the Schur-posivity of all complete multipartite graphs.
+
+
+
+\section{Preliminaries}
+\label{sect:prelims}
+ A \textit{partition} of $n\ge 0$ is a sequence of weakly decreasing positive integers $\lambda=(\lambda_1,\dots,\lambda_k)$ whose sum is $n$.
+ The \textit{length} of $\lambda$ is given by $\ell(\lambda)=k$ and the \textit{size} of $\lambda$ is given by $|\lambda|=n$. In the case where $n=0$, we say $\lambda$ is the \textit{empty partition}. We use exponents to indicate repeated integers in a partition. For instance, $\lambda=(5,5,3,3,1)=(5^2,3^2,1)$. The \textit{diagram} of a partition $\lambda$ of $n$ is an array of $n$ boxes (called \textit{cells}) in left-justified rows such that row $i$ contains $\lambda_i$ boxes, where the rows are indexed from top to bottom and the columns are indexed from left to right. Below, we depict the diagram of the partition $(5,5,3,3,1)$.
+
+ \begin{figure}[H]
+ \begin{tikzpicture}
+ \node[scale=.6] at (0,0) (a) {\ydiagram{5,5,3,3,1}};
+  \end{tikzpicture}
+\label{fig:young_diagram_example}
+ \end{figure}
+
+ A \textit{composition} of $n\ge 0$ is a sequence of positive integers $\kappa=[\kappa_1,\dots,\kappa_j]$ whose sum is $n$. The \textit{length} of $\kappa$ is given by $\ell(\kappa)=j$ and the \textit{size} of $\kappa$ is given by $|\kappa|=n$. In the case where $n=0$, we say $\kappa$ is the \textit{empty composition}.
+ % Given a composition $\kappa$, we use $\Lambda(\kappa)$ to denote the partition obtained by arranging the integers in $\kappa$ in weakly decreasing order. 
+ Again, we sometimes use exponents to denote repeated integers in a composition. 
+
+
+
+A \textit{partially ordered set} or \textit{poset} is a set $P$ equipped with a binary relation $\le$ that is reflexive, antisymmetric, and transitive. We say that $x,y\in P$ are \textit{comparable} if $x\le y$ or $y\le x$, and say they are \textit{incomparable} otherwise. we say $x$ \textit{covers} $y$ and write $y\lessdot x$ if $y<x$ and there is no $z\in P$ such that $y<z<x$. The \textit{Hasse diagram} of $P$ is the graph with vertices $P$ and an edge from $y$ up to $x$ if $y\lessdot x$. 
+
+
+% A \textit{total order} is a partial order where every pair of elements is comparable. We write $x<y$ if $x\le y$ and $x\ne y$.
+% We also use a special type of diagram to visualize posets. 
+
+% \begin{definition}
+%     Let $P$ be a poset. For $x,y\in P$, we say $x$ \textit{covers} $y$ and write $y\lessdot x$ if $y<x$ and there is no $z\in P$ such that $y<z<x$.
+
+
+%     The \textit{Hasse diagram} of $P$ is the graph with vertices $P$ and an edge from $y$ up to $x$ if $y\lessdot x$. 
+% \end{definition}
+
+
+\begin{example}
+\label{ex:hasse}
+Consider the poset $P=\{a,b,c,d,e,f\}$ with relation $\le$ satisfying precisely the conditions
+\[
+a\lessdot b\lessdot f,\qquad a\lessdot c \lessdot e,\qquad d\lessdot c,\andd b\lessdot e.
+\]
+The Hasse diagram of $P$ is depicted below.
+% \ref{fig:hasse_diag}
+\begin{figure}[H]
+    \centering
+         \begin{tikzpicture}
+\node[circle,draw,scale=.75] at (0,0) (a) {$a$};
+\node[circle,draw,scale=.75] at (0,1) (b) {$b$};
+\node[circle,draw,scale=.75] at (0,2) (f) {$f$};
+\node[circle,draw,scale=.75] at (1,0) (d) {$d$};
+\node[circle,draw,scale=.75] at (1,1) (c) {$c$};
+\node[circle,draw,scale=.75] at (1,2) (e) {$e$};
+\draw (a)--(b)--(f);
+\draw (d)--(c)--(e);
+\draw (a)--(c);
+\draw (b)--(e);
+\end{tikzpicture}
+    % \caption{An example of a Hasse diagram of a poset $P$.}
+    % \label{fig:hasse_diag}
+\end{figure}
+\end{example}
+
+% We also associate a special type of graph to all posets.
+
+% \begin{definition}
+    For some poset $P$, the \textit{incomparability graph} of $P$ is the graph $\text{inc}(P)$ on vertices corresponding to the elements of $P$ such that, for all $x,y\in P$, $x$ is adjacent to $y$ if and only if $x$ and $y$ are incomparable.
+    % \[
+    % x\text{ is adjacent to } y\iff x\text{ and }y\text{ are incomparable}
+    % \]
+    % for all $x,y\in P$.
+% \end{definition}
+
+
+\begin{example}
+\label{ex:inc_graph}
+The incomparability graph $\text{inc}(P)$ of the poset $P$ in Example \ref{ex:hasse} is depicted below.
+\begin{figure}[H]
+    \centering
+         \begin{tikzpicture}
+\node[circle,draw,scale=.75] at (0,0) (a) {$a$};
+\node[circle,draw,scale=.75] at (0,1) (b) {$b$};
+\node[circle,draw,scale=.75] at (0,2) (f) {$f$};
+\node[circle,draw,scale=.75] at (1,0) (d) {$d$};
+\node[circle,draw,scale=.75] at (1,1) (c) {$c$};
+\node[circle,draw,scale=.75] at (1,2) (e) {$e$};
+\draw (a)--(d)--(f);
+\draw (d)--(b)--(c);
+\draw (f)--(c);
+\draw (f)--(e);
+\end{tikzpicture}
+\end{figure}
+\end{example}
+
+
+Throughout this paper, we will consider the \textit{dominance partial order} on partitions. For partitions $\lambda=(\lambda_1,\dots,\lambda_k)$ and $\mu=(\mu_1,\dots,\mu_j)$, we say $\mu$ is \textit{dominated} by $\lambda$ and write
+\[
+\lambda \ge \mu \qquad\text{if and only if } \qquad\lambda_1+\cdots+\lambda_i \ge \mu_1+\cdots+\mu_i
+\]
+for all $i\ge 1$. For this definition, we take $\lambda_i=0$ for $i>k$ and $\mu_i=0$ for $i>j$.
+
+
+
+% It is important to note that not every graph is an incomparability graph of some poset.
+
+
+
+
+% We now let $\mathbf{x}=\{x_1,x_2,x_3,\dots\}$ be a countably infinite set of commuting variables and consider the \textit{algebra of formal power series} in variables $\mathbf{x}$ over the rational numbers, which we denote by $\Q[[\mathbf{x}]]$. We say $f(\mathbf{x})$ is symmetric if it is invariant under any permutation of the variables $\mathbf{x}$. The subspace
+Next, let $\mathbf{x} = {x_1, x_2, x_3, \dots}$ be a countably infinite collection of commuting variables. We consider the \textit{algebra of formal power series} over the rational numbers in the variables $\mathbf{x}$, denoted by $\Q[[\mathbf{x}]]$. A function $f(\mathbf{x})$ is termed symmetric if it remains unchanged under any permutation of the variables in $\mathbf{x}$. The subspace
+\[
+\text{Sym}(\mathbf{x})=\{f\in \Q[[\mathbf{x}]]\,\mid\,f\text{ is symmetric}\}
+\]
+forms an algebraic structure known as the \textit{algebra of symmetric functions}.
+
+We first focus on the classical Schur basis for Sym$(\mathbf{x})$, which we introduce using semistandard Young tableau.     A \textit{semistandard Young tableau} (SSYT) of \textit{shape} $\lambda$ is a filling $Q$ of the cells of the diagram $\lambda$ with positive integers such that rows weakly increase from left to right and columns strictly increase from top to bottom.  Given a semistandard Young tableau $Q$, we define the \textit{weight} of $Q$ to be
+    \[
+    \text{wt}(Q)=x_1^{\#1s}x_2^{\#2s}x_3^{\#3s}\cdots.
+    \]
+
+
+
+
+\begin{example}
+\label{ex:SSYT}
+ We portray several examples of SSYTs of shape (4,2,1) below. 
+ 
+ \begin{figure}[H]
+\begin{align*}
+\begin{ytableau}
+       1 &  2 & 3  & 4 \\
+       5  & 6  \\
+        7
+\end{ytableau}
+\qquad
+\begin{ytableau}
+       1 &  1 &  2 & 4 \\
+       2  & 3  \\
+        4
+\end{ytableau}
+\qquad
+\begin{ytableau}
+       2 &  2 & 2  & 7 \\
+       3  & 3  \\
+        5
+\end{ytableau}
+\qquad
+\begin{ytableau}
+       1 &  2 & 5  & 5 \\
+       5  & 5  \\
+        6
+\end{ytableau}
+\end{align*}
+
+\label{fig:SSYTs}
+\end{figure}
+ 
+ From left to right, these SSYTs have weights
+ \begin{align*}
+ \label{eq:SSYTweights}
+ x_1x_2x_3x_4x_5x_6x_7,\qquad x_1^2x_2^2x_3x_4^2,\qquad x_2^3x_3^2x_5x_7,\andd x_1x_2x_5^4x_6.
+ \end{align*}
+ 
+ 
+ 
+\end{example}
+
+Given some partition $\lambda$, the \textit{Schur function} associated to $\lambda$ is
+\[
+s_{\lambda}=\sum_{Q}\text{wt}(Q)
+\]
+where the sum spans over all semistandard Young tableaux $Q$ of shape $\lambda$. 
+
+
+Next, we introduce the classical elementary basis for Sym$(\mathbf{x})$. We define the \textit{$i$th elementary symmetric function} to be
+    \[
+    e_i=s_{(1^i)}
+    \]
+    and the \textit{elementary function} associated to a partition $\lambda$ to be
+    \[
+    e_{\lambda}=e_{\lambda_1}\cdots e_{\lambda_{k}}.
+    \]
+
+
+
+
+We have that
+\[
+\mathbf{s}=\{s_{\lambda}\,\mid\, \lambda\text{ is a partition}\}\andd \mathbf{e}=\{e_{\lambda}\,\mid\, \lambda\text{ is a partition}\}
+\]
+are each bases for $\text{Sym}(\mathbf{x})$. If $\textbf{b}$ is a basis for $\text{Sym}(\mathbf{x})$ which is indexed by partitions, we use the notation
+\[
+[b_{\lambda}]f(\mathbf{x})= \text{the coefficient of $b_{\lambda}$ in the expansion of $f(\mathbf{x})$ in the basis $\mathbf{b}$}. 
+\]
+Given some $f(\mathbf{x})\in \text{Sym}(\mathbf{x})$, we say $f(\mathbf{x})$ is \textit{Schur-positive} if $[s_{\lambda}]f(\mathbf{x})\ge 0$ for all partitions $\lambda$. We say $f(\mathbf{x})$ is \textit{$\mathbf{e}$-positive} if $[e_{\lambda}]f(\mathbf{x})\ge 0$ for all partitions $\lambda$. One important fact regarding these two bases is that the elementary symmetric functions themselves are Schur-positive \cite{ERemmel}. Accordingly, the $\mathbf{e}$-positivity of $f(\mathbf{x})$ implies the Schur-positivity of $f(\mathbf{x})$. Likewise, if $f(\mathbf{x})$ is not Schur-positive, $f(\mathbf{x})$ is also not $\mathbf{e}$-positive.
+
+
+% The properties of Schur-positivity and $\mathbf{e}$-positivity 
+
+%%ADD JUSTIFICATION FOR STUDYING E-POSITIVITY AND SCHUR-POSITIVITY
+
+% Some of the reasons for studying Schur-positivity, as well as some of the major results in this area, are discussed in \cite{lam_schur_pos}. Various methods for proving a symmetric function is Schur-positive are discussed in \cite{sym_cat}.
+
+
+Next, we define a family of functions belonging to Sym$(\mathbf{x})$ known as chromatic symmetric functions, which were introduced in \cite{stan_95}. Given a graph $G$ with vertices $V(G)$, a \textit{proper coloring} of $G$ in $q$ colors is a map
+\[
+\mathcal{C}:V(G)\to\{1,2,3,\dots, q\}
+\]
+such that, if $u$ and $v$ are adjacent, then $\mathcal{C}(u)\ne \mathcal{C}(v)$. For a proper coloring $\mathcal{C}$ of $G$, we define
+    \[
+\mathbf{x}^{\mathcal{C}}=x_{\mathcal{C}(v_1)}x_{\mathcal{C}(v_2)}\cdots x_{\mathcal{C}(v_n)}.
+    \]
+    The \textit{chromatic symmetric function} of a graph $G$ is the formal power series
+\[
+X_G(\mathbf{x})=\sum_{\mathcal{C}}\mathbf{x}^{\mathcal{C}},
+\]
+where the sum ranges over all proper colorings $\mathcal{C}$ of $G$.
+    The chromatic symmetric function is symmetric because permuting the variables of the function is equivalent to permuting the colors in each proper coloring. We say that a graph $G$ is \textit{Schur-positive} (resp. \textit{$\mathbf{e}$-positive}) if $X_G(\mathbf{x})$ is Schur-positive (resp. $\mathbf{e}$-positive). 
+
+
+
+There are certain structural properties associated with graphs which are either Schur-positive or $\mathbf{e}$-positive. For example, A graph $G$ is \textit{nice} if whenever $G$ has a stable partition of type $\lambda$, $\mu\le \lambda$ implies $G$ also has a stable partition of type $\mu$. The contrapositive and the following proposition is a useful tool for disproving the Schur-positivity of certain graphs.
+
+\begin{proposition}[\cite{stan_98}]
+\label{prop:schur_pos_means_nice}
+If $G$ is Schur-positive, $G$ is nice.
+\end{proposition}
+
+
+
+    
+    % Likewise, we say that a graph $G$ is \textit{$\mathbf{e}$-positive} if $X_G(\mathbf{x})$ is $\mathbf{e}$-positive.
+
+ In order to discuss an important result from \cite{WW2020}, we now introduce a combinatorial object known as a special rim hook tabloid. 
+ 
+ 
+ A \textit{rim hook} of \textit{length} $k$ is a sequence of $k$ connected cells in a diagram, each of which lie on the southeast boundary, and whose removal results in a smaller diagram. For any rim hook, we call each path between consecutive cells a \textit{step}. If the cells are in different rows, we use the term \textit{north step} ($N$-step), whereas if the cells are in different columns, we use the term $\textit{east step}$ (E-step). 
+ 
+ 
+ 
+ Let $\kappa=[\kappa_1,\dots,\kappa_{j}]$ be a composition and $\lambda=(\lambda_1,\dots,\lambda_k)$ be a partition. A \textit{rim hook tabloid} of shape $\lambda$ and content $\kappa$ is a filling of the cells of the diagram of $\lambda$ with $j$ sequences of connected cells $r_i$ such that $r_1$ is a rim hook of length $\kappa_1$ and, for all $1\le i \le j-1$, if $r_1,\dots, r_i$ are removed from $\lambda$ to form $\tilde{\lambda}$, $r_{i+1}$ is a rim hook of $\tilde{\lambda}$ of length $\kappa_{i+1}$.  A \textit{special rim hook tabloid} (SRH tabloid) is a rim hook tabloid such that every rim hook intersects the first column. We define the \textit{sign} of an SRH tabloid to be
+ \[
+ \mathrm{sgn}(T)=(-1)^{\text{\# north steps in diagram}}.
+ \]
+ Moreover, we use the notation $\mathcal{T}_{\lambda}$ to denote the set of all special rim hook tabloids of shape $\lambda$. Given an SRH tabloid $T$, we denote by $\kappa_T$ the \textit{content} of $T$, which is the composition given by the rim hook lengths read from the bottom to the top of the diagram.
+
+
+
+
+
+ 
+ \begin{example}
+We portray below all the possible SRH tabloids of shape $\lambda=(4,2,2)$, that is, all elements of the set $\mathcal{T}_{(4,2,2)}$.
+ \begin{figure}[H]
+ \centering
+ \begin{tikzpicture}
+ %first diagram
+ \node at (1,0) {\ydiagram{4,2,2}};
+ \node at (.05,.65) [circle, fill = black, scale = .5, draw] (11){};
+  \node at (.65,.65) [circle, fill = black, scale = .5, draw] (12){};
+  \node at (1.3,.65) [circle, fill = black, scale = .5, draw] (13){};
+\node at (1.95,.65) [circle, fill = black, scale = .5, draw] (14){};
+\node at (.05,0) [circle, fill = black, scale = .5, draw] (21){};
+\node at (.65,0) [circle, fill = black, scale = .5, draw] (22){};
+\node at (.05,-.65) [circle, fill = black, scale = .5, draw] (31){};
+\node at (.65,-.65) [circle, fill = black, scale = .5, draw] (32){};
+%
+\draw (11)--(12)--(13)--(14);
+\draw (21)--(22);
+\draw (31)--(32);
+%
+%second diagram
+\node at (4,0) {\ydiagram{4,2,2}};
+ \node at (3.05,.65) [circle, fill = black, scale = .5, draw] (11){};
+  \node at (3.65,.65) [circle, fill = black, scale = .5, draw] (12){};
+  \node at (4.3,.65) [circle, fill = black, scale = .5, draw] (13){};
+\node at (4.95,.65) [circle, fill = black, scale = .5, draw] (14){};
+\node at (3.05,0) [circle, fill = black, scale = .5, draw] (21){};
+\node at (3.65,0) [circle, fill = black, scale = .5, draw] (22){};
+\node at (3.05,-.65) [circle, fill = black, scale = .5, draw] (31){};
+\node at (3.65,-.65) [circle, fill = black, scale = .5, draw] (32){};
+\draw (21)--(22)--(12)--(13)--(14);
+\draw (31)--(32);
+%
+%third diagram
+%
+\node at (7,0) {\ydiagram{4,2,2}};
+ \node at (6.05,.65) [circle, fill = black, scale = .5, draw] (11){};
+  \node at (6.65,.65) [circle, fill = black, scale = .5, draw] (12){};
+  \node at (7.3,.65) [circle, fill = black, scale = .5, draw] (13){};
+\node at (7.95,.65) [circle, fill = black, scale = .5, draw] (14){};
+\node at (6.05,0) [circle, fill = black, scale = .5, draw] (21){};
+\node at (6.65,0) [circle, fill = black, scale = .5, draw] (22){};
+\node at (6.05,-.65) [circle, fill = black, scale = .5, draw] (31){};
+\node at (6.65,-.65) [circle, fill = black, scale = .5, draw] (32){};
+%
+\draw (11)--(12)--(13)--(14);
+\draw (31)--(32)--(22);
+%
+%fourth diag
+%
+\node at (10,0) {\ydiagram{4,2,2}};
+ \node at (9.05,.65) [circle, fill = black, scale = .5, draw] (11){};
+  \node at (9.65,.65) [circle, fill = black, scale = .5, draw] (12){};
+  \node at (10.3,.65) [circle, fill = black, scale = .5, draw] (13){};
+\node at (10.95,.65) [circle, fill = black, scale = .5, draw] (14){};
+\node at (9.05,0) [circle, fill = black, scale = .5, draw] (21){};
+\node at (9.65,0) [circle, fill = black, scale = .5, draw] (22){};
+\node at (9.05,-.65) [circle, fill = black, scale = .5, draw] (31){};
+\node at (9.65,-.65) [circle, fill = black, scale = .5, draw] (32){};
+%
+\draw (21)--(11)--(12)--(13)--(14);
+\draw (31)--(32)--(22);
+%
+%fifth diag
+%
+\node at (13,0) {\ydiagram{4,2,2}};
+ \node at (12.05,.65) [circle, fill = black, scale = .5, draw] (11){};
+  \node at (12.65,.65) [circle, fill = black, scale = .5, draw] (12){};
+  \node at (13.3,.65) [circle, fill = black, scale = .5, draw] (13){};
+\node at (13.95,.65) [circle, fill = black, scale = .5, draw] (14){};
+\node at (12.05,0) [circle, fill = black, scale = .5, draw] (21){};
+\node at (12.65,0) [circle, fill = black, scale = .5, draw] (22){};
+\node at (12.05,-.65) [circle, fill = black, scale = .5, draw] (31){};
+\node at (12.65,-.65) [circle, fill = black, scale = .5, draw] (32){};
+%
+\draw (31)--(32)--(22)--(12)--(13)--(14);
+%
+%
+%sixth diagram
+%
+\node at (7,-3) {\ydiagram{4,2,2}};
+ \node at (6.05,-2.35) [circle, fill = black, scale = .5, draw] (11){};
+  \node at (6.65,-2.35) [circle, fill = black, scale = .5, draw] (12){};
+  \node at (7.3,-2.35) [circle, fill = black, scale = .5, draw] (13){};
+\node at (7.95,-2.35) [circle, fill = black, scale = .5, draw] (14){};
+\node at (6.05,-3) [circle, fill = black, scale = .5, draw] (21){};
+\node at (6.65,-3) [circle, fill = black, scale = .5, draw] (22){};
+\node at (6.05,-3.65) [circle, fill = black, scale = .5, draw] (31){};
+\node at (6.65,-3.65) [circle, fill = black, scale = .5, draw] (32){};
+%
+\draw (11)--(21);
+\draw (31)--(32)--(22)--(12)--(13)--(14);
+ \end{tikzpicture}
+
+ \end{figure}
+Counting the parity of $N$-steps, we find the second, third, and sixth tabloids have negative sign whereas the rest of the tabloids have positive sign.
+
+ 
+
+ \end{example}
+
+
+
+ %  Now, let $\lambda$ be a partition and $G$ be a graph. A \textit{semi-ordered stable partition} of $G$ is a partition of $V(G)$ into $k$ stable sets (called \textit{parts}) having cardinalities $\lambda_1,\dots,\lambda_k$ such that parts of the same cardinality are ordered.  Considering SRH tabloids and semi-ordered stable partitions allows us to state the following result from \cite{WW2020}.
+ 
+ % \begin{theorem}\cite{WW2020}
+ % \label{thm:WW}
+ % For any graph $G$ and any partition $\lambda$ of $|V(G)|$, we have
+ % \begin{align*}
+ %     [s_{\lambda}]X_G=\sum_{T\in \mathcal{T}_{\lambda}}\mathrm{sgn}(T)so_G(T),
+ % \end{align*}
+ % where $so_G(T)$ denotes the number of semi-ordered stable partitions of $G$ of type $\Lambda(\kappa_T)$.
+ % \end{theorem}
+
+ 
+ In \cite{WW2020}, the formula is utilized to prove the non-Schur-positivity of subclasses of complete tripartite graphs, squid graphs, and pineapple graphs. 
+
+
+\textcolor{red}{TO ADD:
+\begin{itemize}
+    \item definition of niceness
+    \item definition of k-partition, partition of vertices
+    \item definition of k-sets
+    \item schur pos implies nice
+    \item $P_4$ free and claw free implies schur positive
+    \item $G$-free graphs defn
+    \item decide to write claw free or $K_{(3,1)}$-free
+    \item Theorem \ref{thm:claw_path_free}
+\end{itemize}}
+
+% \begin{definition}
+% \label{def:nice}
+%     A graph $G$ is \textit{nice} if whenever $G$ has a stable partition of type $\lambda$, $\mu\le \lambda$ implies $G$ also has a stable partition of type $\mu$.
+% \end{definition}
+
+% \begin{proposition}[\cite{stan_98}]
+% \label{prop:schur_pos_means_nice}
+%     If $G$ is Schur-positive, then $G$ is nice.
+% \end{proposition}
+
+
+
+
+\section{Special Rim Hook $G$-Tabloids}
+\label{sect:srh_G_tabs}
+
+  In this section, we define an SRH $G$-tabloid, which is a modified version of an SRH tabloid that corresponds to a graph $G$. We then state a formula for all Schur coefficients of chromatic symmetric functions in terms of signed sums of these combinatorial objects, which the authors proved in \cite{gen_nets}.
+ 
+ 
+ \begin{definition}
+ \label{def:SRH_G_tabs}
+ Consider a graph $G$ and a partial order $\le$ on the vertices of $G$ satisfying: if vertices $u$ and $v$ are nonadjacent, then $u$ and $v$ are comparable.
+ 
+ 
+ We can then define a \textit{special rim hook $G$-tabloid} (or  \textit{SRH $G$-tabloid}) to be an SRH tabloid such that every cell is filled with a vertex of $G$ and the following conditions are met.
+\begin{itemize}
+    \item Cells spanned by the same rim hook contain vertices which form a stable set.
+    \item For each rim hook, reading the corresponding vertices from southwest to northeast order results in an increasing sequence with respect to the partial order.
+\end{itemize}
+The \textit{sign} and \textit{shape} of an SRH $G$-tabloid are respectively the sign and shape of the underlying SRH tabloid.
+We denote the set of all SRH $G$-tabloids of shape $\lambda$ by $\mathcal{T}_{\lambda,G}$.
+ \end{definition}
+
+ % While working with SRH $G$-tabloids, it is often helpful to distinguish between different parts of the underlying diagram. 
+
+\begin{definition}
+\label{def:tail_head}
+Let $T$ be an SRH $G$-tabloid. We define the \textit{tail} of $T$, denoted \text{tl}$(T)$, to be the part of $T$ containing all rows of length $1$. Likewise, we define the \textit{head} of $T$, denoted $\text{hd}(T)$ to be the part of $T$ containing all rows of length strictly greater than $1$. Either tl$(T)$ or hd$(T)$ could be empty, depending on the shape of $T$. 
+\end{definition}
+
+Let $T$ and $T'$ be SRH $G$-tabloids. We say that
+\[
+\text{tl}(T)=\text{tl}(T') \orr \text{hd}(T)=\text{hd}(T')
+\]
+if and only if the tails, or respectively the heads, of $T$ and $T'$ are equal as SRH $G'$-tabloids for some subgraph $G'$ of $G$.
+
+
+
+ The choice of a partial order introduces flexibility when working with SRH $G$-tabloids. When $G$ is the incomparability graph of a poset $P$, a natural approach is to adopt the partial order defined by the poset itself. In an incomparability graph, two vertices are non-adjacent precisely when they are comparable. This ensures that the necessary condition is automatically met. Otherwise, if $G$ is not an incomparability graph, the simplest approach is to choose a total order on $G$ by labeling the vertices numerically.
+
+\begin{example}
+\label{ex:SRH_G_tab}
+
+
+Consider the poset $P$ depicted in Example \ref{ex:hasse} and the corresponding incomparability graph $G=\text{inc}(P)$ depicted in Example \ref{ex:inc_graph}. We depict below some SRH $G$-tabloids of shape $(2,1^4)$, that is, elements of the set $\mathcal{T}_{(2,1^4),G}$.
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+%first diagram
+ \node at (1,0) {\ydiagram{2,1,1,1,1}};
+  \node at (.65,1.3) [] (a){$a$};
+  \node at (1.3,1.3) [] (c){$c$};
+  \node at (.65,.65) [] (d){$d$};
+  \node at (.65,0) [] (f){$f$};
+  \node at (.65,-.65) [] (b){$b$};
+  \node at (.65,-1.3) [] (e){$e$};
+  \draw [thick] (.65,-.45)--(.65,-.2);
+  \draw [thick](.85,1.3)--(1.1,1.3);
+%second diagram
+ \node at (4,0) {\ydiagram{2,1,1,1,1}};
+  \node at (3.65,1.3) [] (b){$b$};
+  \node at (4.3,1.3) [] (f){$f$};
+  \node at (3.65,.65) [] (d){$d$};
+  \node at (3.65,0) [] (c){$c$};
+  \node at (3.65,-.65) [] (a){$a$};
+  \node at (3.65,-1.3) [] (e){$e$};
+  \draw [thick] (3.65,-.45)--(3.65,-.2);
+  \draw [thick](3.85,1.3)--(4.1,1.3);
+%third diagram
+ \node at (7,0) {\ydiagram{2,1,1,1,1}};
+  \node at (6.65,1.3) [] (b){$b$};
+  \node at (7.3,1.3) [] (e){$e$};
+  \node at (6.65,.65) [] (a){$a$};
+  \node at (6.65,0) [] (d){$d$};
+  \node at (6.65,-.65) [] (f){$f$};
+  \node at (6.65,-1.3) [] (c){$c$};
+  \draw [thick] (6.65,.85)--(6.65,1.1);
+  \draw [thick](6.85,1.3)--(7.1,1.3);
+%fourth diag
+ \node at (10,0) {\ydiagram{2,1,1,1,1}};
+  \node at (9.65,1.3) [] (a){$a$};
+  \node at (10.3,1.3) [] (e){$e$};
+  \node at (9.65,.65) [] (f){$f$};
+  \node at (9.65,0) [] (b){$b$};
+  \node at (9.65,-.65) [] (c){$c$};
+  \node at (9.65,-1.3) [] (d){$d$};
+  \draw [thick] (9.65,.2)--(9.65,.45);
+  \draw [thick](9.85,1.3)--(10.1,1.3);
+\end{tikzpicture}
+% \caption{Examples of SRH $G$-tabloids corresponding to an incomparability graph.}
+% \label{fig:SRH_G_tabs}
+\end{figure}
+\end{example}
+
+
+By considering SRH $G$-tabloids, we may obtain an alternative combinatorial interpretation of Schur coefficients, as is done in \cite{gen_nets}.
+
+\begin{proposition}[\cite{gen_nets}]
+\label{cor:better_s_form}
+Consider any graph $G$, a partition $\lambda$ of $|V(G)|$, and a partial order on the vertices of $G$ such that nonadjacent vertices are comparable. We have
+\[
+[s_{\lambda}]X_G=\sum_{T\in \mathcal{T}_{\lambda,G}}\mathrm{sgn}(T).
+\]
+\end{proposition}
+
+
+\begin{remark}
+When $G=\text{inc}(P)$, there is a sign-preserving bijection between SRH $G$-tabloids of shape $\lambda$ and $P$-arrays of shape $\pi(\lambda)$, which appear in \cite{gash_96}. Thus, Proposition \ref{cor:better_s_form} can also arise as a corollary to the proof of Theorem 3 in \cite{gash_96}.
+\end{remark}
+
+
+
+ \section{Complete Multipartite Graphs}
+\label{sect:comp_multi_graphs}
+
+
+% \subsection{Definitions and Background for Complete Multipartite Graphs}
+% \label{defns:comp_multi_graphs}
+ 
+ \begin{definition}
+Let $\lambda=(\lambda_1,\dots,\lambda_k)$ be a partition. A \textit{complete multipartite graph} $K_{\lambda}$ is a graph with $k$ stable sets of vertices of respective sizes $\lambda_1,\dots,\lambda_k$ with every possible edge between stable sets added.
+\end{definition}
+
+
+\begin{example} The complete multipartite graph $K_{(4,2,2)}$ is shown below.
+\label{ex:comp_multi}
+
+% in Figure \ref{fig:comp_multi_example}.
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+%% vertices
+\node[] at (-2,1.5) {$K_{(4,2,2)}=$};
+\draw[fill=black,scale=.75] (-.5,0) circle (3pt);
+\draw[fill=black,scale=.75] (-.5,.5) circle (3pt);
+\draw[fill=black,scale=.75] (4,0) circle (3pt);
+\draw[fill=black,scale=.75] (4,.5) circle (3pt);
+% \draw[fill=black] (2,1) circle (3pt);
+\draw[fill=black,scale=.75] (1.5,3) circle (3pt);
+\draw[fill=black,scale=.75] (1,3) circle (3pt);
+\draw[fill=black,scale=.75] (2,3) circle (3pt);
+\draw[fill=black,scale=.75
+] (2.5,3) circle (3pt);
+%
+\draw[thick,scale=.75] (1,3) -- (4,.5);
+\draw[thick,scale=.75] (1,3) -- (4,0);
+\draw[thick,scale=.75] (1,3) -- (-.5,0);
+\draw[thick,scale=.75] (1,3) -- (-.5,.5);
+%
+\draw[thick,scale=.75] (1.5,3) -- (4,.5);
+\draw[thick,scale=.75] (1.5,3) -- (4,0);
+\draw[thick,scale=.75] (1.5,3) -- (-.5,0);
+\draw[thick,scale=.75] (1.5,3) -- (-.5,.5);
+%
+\draw[thick,scale=.75] (2,3) -- (4,.5);
+\draw[thick,scale=.75] (2,3) -- (4,0);
+\draw[thick,scale=.75] (2,3) -- (-.5,0);
+\draw[thick,scale=.75] (2,3) -- (-.5,.5);
+%
+\draw[thick,scale=.75] (2.5,3) -- (4,.5);
+\draw[thick,scale=.75] (2.5,3) -- (4,0);
+\draw[thick,scale=.75] (2.5,3) -- (-.5,0);
+\draw[thick,scale=.75] (2.5,3) -- (-.5,.5);
+%
+\draw[thick,scale=.75] (-.5,0) -- (4,.5);
+\draw[thick,scale=.75] (-.5,0) -- (4,0);
+\draw[thick,scale=.75] (-.5,.5) -- (4,.5);
+\draw[thick,scale=.75] (-.5,.5) -- (4,0);
+\end{tikzpicture}
+% \caption{An example of a complete multipartite graph.}
+% \label{fig:comp_multi_example}
+\end{figure}
+\end{example}
+
+
+All complete multipartite graphs are incomparability graphs. Indeed, $K_{\lambda}$ is precisely the incomparability graphs of the poset consisting of disjoint chains of lengths $\lambda_1,\dots,\lambda_k$. However, as can be observed in Example \ref{ex:comp_multi}, any complete multipartite graph $K_{\lambda}$ with $\lambda_1\ge 3$ and $k\ge 2$ contains an induced copy of the claw. Therefore, most complete multipartite graphs are neither covered by the main theorem in \cite{gash_96} nor the Claw-Free Conjecture. Throughout this section, we will show that these graphs are not Schur-positive for most choices of $\lambda$.
+
+
+In \cite{WW2020}, a Schur-positivity classification is offered for complete bipartite and complete tripartite graphs. Specifically, Example 3.4 and Theorem 3.7 in \cite{WW2020} determine that the only Schur-positive complete bipartite graphs are
+\[
+K_{\lambda}\qquad \text{for}\qquad \lambda\in \{(1,1), (2,1), (2,2), (3,2)\},
+\] while the only Schur-positive complete tripartite graphs are
+\[
+K_{\lambda}\qquad \text{for}\qquad\lambda\in\{(1,1,1), (2,1,1), (2,2,1), (2,2,2), (3,2,2)\}.
+\]
+We extend this result to classify all complete multipartite graphs in terms of Schur-positivity in Theorem \ref{thm:classif}. We do not consider complete multipartite graphs $K_{\lambda}$ with $\ell(\lambda)=1$ since these are trivially $\mathbf{e}$-positive as the union of $P_1$ graphs. We begin with the following definition, which characterizes a special type of partition. 
+
+
+
+% Original sentence above: Specifically, Example 3.4 and Theorem 3.7 in \cite{WW2020} determine that the only Schur-positive complete bipartite graphs are $K_{(1,1)}$, $K_{(2,1)}$, $K_{(2,2)}$, and $K_{(3,2)}$, while the only Schur-positive complete tripartite graphs are $K_{(1,1,1)}, K_{(2,1,1)}, K_{(2,2,1)}, K_{(2,2,2)}$, and $K_{(3,2,2)}$.
+
+\begin{definition}
+A partition $\lambda=(\lambda_1,\dots,\lambda_k)$ is \textit{balanced} if $\lambda_1\le \lambda_k+1$. 
+\end{definition}
+
+
+For example, the partitions $(5,5,5,4)$ and $(2,1,1,1)$ are balanced whereas $(3,2,1)$ and $(5,5,2,2)$ are not. The next proposition employs this definition and is a useful tool for showing graphs are not Schur-positive. 
+
+\begin{proposition}
+\label{prop:only_balanced_partitions}
+Assume $G$ is Schur-positive and has a unique stable $k$-partition, which is of type $\lambda=(\lambda_1,\dots,\lambda_k)$. Then, $\lambda$ is balanced.
+\end{proposition}
+\begin{proof}
+% Assume $\lambda$ is not balanced so $\lambda_1>\lambda_k+1$.
+
+
+Since $G$ is Schur-positive with a unique stable $k$-partition $\lambda$, there is no $k$-partition $\mu$ dominated by $\lambda$. Otherwise, by Proposition \ref{prop:schur_pos_means_nice}, $G$ would have a stable $k$-partition of type $\mu$ which is a contradiction to the uniqueness of $\lambda$.
+
+
+
+%%
+%% I originally had the below lines in this proof but I do not think they are necessary.
+%%
+
+% Suppose there exists $1\le j \le k-1$ such that $\lambda_j\ge \lambda_{j+1}+2$. Then,
+% \[
+% \lambda = (\lambda_1,\dots,\lambda_j,\lambda_{j+1},\dots,\lambda_k)\ge (\lambda_1,\dots,\lambda_{j}-1,\lambda_{j+1}+1,\dots,\lambda_k),
+% \]
+% which is a contradiction. Thus, for all $1\le j \le k-1$, we have $\lambda_j<\lambda_{j+1}+2$.
+
+
+Assume $\lambda$ is not balanced so $\lambda_1>\lambda_k+1$. Choose the largest $1\le j \le k-1$ such that $\lambda_j=\lambda_1$. Likewise, choose the smallest $2\le i \le k$ such that $\lambda_i=\lambda_k$. We then have
+\begin{align*}
+\lambda&=(\lambda_1,\dots,\lambda_j,\lambda_{j+1},\dots, \lambda_{i-1},\lambda_i,\dots,\lambda_k)\\
+&\ge (\lambda_1,\dots,\lambda_j-1,\lambda_{j+1},\dots,\lambda_{i-1},\lambda_{i}+1,\dots,\lambda_k),
+\end{align*}
+% \[
+% \lambda=(\lambda_1,\dots,\lambda_j,\dots,\lambda_i,\dots,\lambda_k)\ge (\lambda_1,\dots,\lambda_k-1
+% ,\dots,\lambda_{j}+1,\dots,\lambda_k),
+% \]
+which is a contradiction. Note that the latter is a valid partition since
+\[
+\lambda_1-1=\lambda_j-1 \ge \lambda_{j+1}\ge\cdots\ge \lambda_{i-1}\ge {\lambda_i+1}=\lambda_k+1.
+\]
+We conclude that $\lambda$ must be balanced.
+\end{proof}
+
+
+% \subsection{A Schur-Positivity Classification of Most Complete Multipartite Graphs}
+% \label{sect:class_most_comp_multis}
+
+% Next, we classify almost all complete multipartite graphs in terms of Schur-positivity. The classification will be finished in Section \ref{sect:K_32_is_s_pos}. We begin by obtaining a corollary to Proposition \ref{prop:only_balanced_partitions}, which 
+
+We can now show that only a special subclass of complete multipartite graphs have the potential to be Schur-positive.
+
+\begin{corollary}
+\label{cor:only_balanced_comp_graphs}
+All complete multipartite graphs $K_{\lambda}$ for which $\lambda$ is not balanced are not Schur-positive and therefore not $\mathbf{e}$-positive. 
+\end{corollary}
+\begin{proof}
+Complete multipartite graphs $K_{\lambda}$ with $\ell (\lambda)=k$ have a unique stable $k$-partition of type $\lambda$, obtained by dividing the vertices into the $k$ stable $\lambda_i$-sets given in the definition. If any of these $\lambda_i$-sets is separated into two or more stable sets, there are $k-1$ stable $\lambda_i$-sets leftover to divide into at most $k-2$ stable sets. This is impossible since $K_{\lambda}$ includes possible all edges between the stable $\lambda_i$-sets. Hence, if $K_{\lambda}$ is Schur-positive, $\lambda$ is balanced. 
+
+
+% To see this, we first observe that any stable partition of $K_{\lambda}$ must have at least $k$-parts; if we choose one vertex from each stable $\lambda_i$-set, they all must be in different parts.
+\end{proof}
+
+To illustrate the last two results, we consider an example of a complete multipartite graph which is not Schur-positive.
+
+\begin{example}
+For the sake of contradiction, assume that the graph $G=K_{(5,5,5,4,3,3)}$ is Schur-positive. We note that the partition $(5,5,5,4,3,3)$ is not balanced. We then have:
+\[
+(5,5,5,4,3,3)\ge (5,5,4,4,4,3).
+\]
+Since $G$ has a stable partition of type $(5,5,5,4,3,3)$, $G$ should also have a stable partition of type $(5,5,4,4,4,3)$ by Proposition \ref{prop:schur_pos_means_nice}. However, no such stable partition exists so we have a contradiction.
+\end{example}
+
+
+
+Now that we have reduced the cases to consider only complete multipartite graphs $K_{\lambda}$ where $\lambda$ is balanced, we use a similar argument to reduce the cases even further. 
+
+
+\begin{theorem}
+\label{thm:only_K32_may_b_s_pos}
+If $K_{\lambda}$ is a complete multipartite graph with $\ell(\lambda)\ge 2$, then $K_{\lambda}$ is $\mathbf{e}$-positive if $\lambda_i\in\{1,2\}$. Otherwise, if $\lambda$ is not $(3,2^{\beta})$ for $\beta\ge 1$, then $K_{\lambda}$ is not Schur-positive. 
+\end{theorem}
+\begin{proof}
+By Corollary \ref{cor:only_balanced_comp_graphs}, it suffices to consider only cases of graphs $K_{\lambda}$ for which $\lambda$ is balanced.
+\begin{enumerate}
+    \item Firstly, assume $\lambda_i\in\{1,2\}$ for all $i$. We have that $K_{\lambda}$ is $K_{(3,1)}$-free since $K_{\lambda}$ has no stable $3$-set. Thus, $K_{\lambda}$ is $\mathbf{e}$-positive as a claw-free incomparability graph \cite{hikita24}.
+
+    %%
+    %% Originally used the below argument but it is no longer necessary as Stanley-Stembridge has been resolved.
+    %%
+    
+    % Assume, $K_{\lambda}$ has an induced $P_4$ subgraph, labeled consecutively $v_1,\dots,v_4$. Then $v_1$ and $v_4$ must be in the same stable set. However, we then have that $v_3$ is adjacent to $v_4$ but nonadjacent to $v_1$, a contradiction. Hence, $K_{\lambda}$ is $K_{(3,1)}$-free and $P_4$-free so $\mathbf{e}$-positive by Theorem \ref{thm:claw_path_free}.
+    
+    \item Secondly, assume $\lambda=(m^{\alpha},(m-1)^{\beta})$ for $\alpha\ge 2$, $\beta\ge 0$, $m\ge 3$. We then have
+    \[
+    (m^{\alpha},(m-1)^{\beta})\ge (m^{\alpha-2},(m-1)^{\beta+2},2).
+    \]
+However, $K_{\lambda}$ does not have a stable partition of type $(m^{\alpha-2},(m-1)^{\beta+2},2)$. Assume otherwise. Then the $\alpha-2$ $m$-parts must be filled by stable $m$-sets. We then have two stable $m$-sets leftover, which must each be split into different parts in the stable partition. If one of them fills an $(m-1)$-part, there is only one vertex leftover, which cannot be placed as it is adjacent to all other vertices. If one of them fills the $2$-part, the remaining $m-2$ vertices cannot be placed as they are adjacent to all other vertices. Hence, $K_{\lambda}$ is not Schur-positive by Proposition \ref{prop:schur_pos_means_nice}.
+
+
+
+
+
+
+\item Lastly, assume $\lambda=(m,(m-1)^{\beta})$ for $\beta \ge 2, m\ge 4$. We then have
+\[
+(m,(m-1)^{\beta})\ge (m,(m-1)^{\beta-2},(m-2)^2,2).
+\]
+However, $K_{\lambda}$ does not have a stable partition of type $(m,(m-1)^{\beta-2},(m-2)^2,2)$. Assume otherwise. Then the $m$-part must be filled by the unique stable $m$-set and the $\beta-2$ $(m-1)$-parts must be filled with stable $(m-1)$-sets. We then have two $(m-1)$-sets left over, which must be split into different parts in the stable partition. If one of them fills an $(m-2)$-part, there is only one vertex leftover, which cannot be placed  as it is adjacent to all other vertices. If one of them fills the $2$-part, the remaining $m-3$ vertices cannot be placed as they are adjacent to all other vertices. Hence, $K_{\lambda}$ is not Schur-positive by Proposition \ref{prop:schur_pos_means_nice}.
+
+
+
+\end{enumerate}
+
+The case where $\lambda=(m,m-1)$ is covered by the classification of complete bipartite graphs in Example 3.4 of \cite{WW2020}. The only general case which remains is when $\lambda=(3,2^{\beta})$, $\beta\ge 2$.
+\end{proof}
+
+To illustrate the last result, we provide two examples of complete multipartite graphs which are not be Schur-positive. 
+\begin{example}
+For sake of contradiction, assume the graph $G=K_{(6,6,5,5,5)}$ is Schur-positive. This graph falls under the second case in the prior proof. We have
+\[
+(6,6,5,5,5)\ge (5,5,5,5,5,2).
+\]
+Since $G$ has a stable partition of type $(6,6,5,5,5)$, $G$ should also have a stable partition of type $(5,5,5,5,5,2)$ by Proposition \ref{prop:schur_pos_means_nice}. However, no such stable partition exists.
+
+
+Next, for sake of contradiction, assume the graph $G=K_{(5,4,4,4)}$ is Schur-positive.
+This graph falls under the third case in the prior proof. We have
+\[
+(5,4,4,4)\ge (5,4,3,3,2).
+\]
+Since $G$ has a stable partition of type $(5,4,4,4)$, $G$ should also have a stable partition of type $(5,4,3,3,2)$ by Proposition \ref{prop:schur_pos_means_nice}. However, no such stable partition exists.
+
+\end{example}
+
+
+% \subsection{The Graph $K_{(3,2^{\beta})}$ is Schur-Positive}
+% \label{sect:K_32_is_s_pos}
+
+% In order to finish the classification of complete multipartite graphs, we first derive a formula for the Schur coefficients of the chromatic symmetric functions of the graphs $K_{(2^{\beta})}$, $\beta \ge 1$. To do so, we begin with some definitions.
+
+
+% In order to finish the classification of complete multipartite graphs, we next derive a formula for the Schur coefficients of the chromatic symmetric functions of the graphs $K_{(2^{\beta})}$, $\beta \ge 1$.
+
+% \begin{definition}
+% Let $T$ be an SRH $G$-tabloid. We define the \textit{tail sequence of $T$}, denoted $\text{ts}(T)$, to be the sequence of vertices of $G$ in the rows of length $1$ (read from the bottom to the top). Note that this sequence may be empty if $T$ has no rows of length $1$. Moreover, we refer to the rest of the diagram of $T$ (that is, all rows of length greater than $1$) by the \textit{head}, denoted $\text{hd}(T)$.
+% \end{definition}
+
+We next prove Theorem \ref{thm:inv_paths_tail}, which significantly reduces the number of SRH G-tabloids which must be counted to compute Schur coefficients of the chromatic symmetric function of an incomparability graph of $G$.
+
+\begin{definition}
+Let $T$ be an SRH $G$-tabloid. We define the \textit{tail sequence of $T$}, denoted $\text{ts}(T)$, to be the sequence of vertices of $G$ in the rows of length $1$ of the tabloid $T$, read from bottom to top.
+\end{definition}
+
+\begin{definition}
+Let $(P,\le)$ be a finite poset and $G=\text{inc}(P)$. A \textit{non-increasing sequence in $G$} is a sequence $(v_1,\dots,v_k)$ of vertices of $G$ such that $v_i \nleq v_{i+1}$ for $1\le i \le k-1$. A \textit{spanning non-increasing sequence of $G$} is a non-increasing sequence in $G$ which includes every vertex of $G$ exactly once. Let $N_{\mathrm{sp}}(G)$ denote the number of spanning non-increasing sequences of $G$. We note that if $G$ has no vertices, then $N_{\mathrm{sp}}(G)=1$, representing the empty non-increasing sequence in $G$. 
+\end{definition}
+
+To illustrate the prior definitions, we note that the tail sequences of the SRH $G$-tabloids in Example \ref{ex:SRH_G_tab} are respectively
+\[
+(e,b,f,d),\qquad (e,a,c,d),\qquad (c,f,d,a),\andd (d,c,b,f).
+\]
+Among these, only $(c,f,d,a)$ is a non-increasing sequence in the underlying incomparability graph. An example of a spanning non-increasing sequence of this incomparability graph (originally defined in Examples \ref{ex:hasse} and \ref{ex:inc_graph}) is the sequence $(f,e,b,c,a,d)$.
+
+
+
+
+% \begin{lemma} %%%is this lemma actually true? don't see an obvious proof for it
+
+
+% Assume $Q$ is a subposet of $P$ (both finite). We then have:
+% \[
+% N_{\mathrm{sp}}(\text{inc}(Q))\le N_{\mathrm{sp}}(\text{inc}(P)).
+% \]
+% \end{lemma}
+% \begin{proof}
+
+% \end{proof}
+% The next proposition significantly reduces the number of SRH G-tabloids which must be counted to compute Schur coefficients, in the case where $G$ is an incomparability graph. 
+% In order to state the proposition, we introduce the following notation:
+
+To make way for the following theorem, we now set the notation
+\[
+\tilde{\mathcal{T}}_{\lambda,G}=\{ T\in \mathcal{T}_{\lambda,G} \text{ such that } \text{ts}(T)\text{ is a non-increasing sequence in $G$}\},
+\]
+which may be used when $G$ is an incomparability graph.
+\begin{theorem}
+\label{thm:inv_paths_tail}
+For any incomparability graph $G$, we have
+\[
+[s_{\lambda}]X_G=\sum_{T\in\tilde{\mathcal{T}}_{\lambda,G}}\mathrm{sgn}(T).
+\]
+\begin{proof}
+Consider any incomparability graph $G$ and partition $\lambda$. From Corollary \ref{cor:better_s_form}, we have
+\[
+[s_{\lambda}]X_G=\sum_{T\in\mathcal{T}_{\lambda,G}}\mathrm{sgn}(T).
+\]
+Suppose $\lambda$ has $k$ rows of length $1$. We denote by $S_k(G)$ the set of all sequences of distinct vertices of $G$ of length $k$. Moreover, we set
+\[
+\mathcal{T}_{\lambda,G,s}=\{T\in\mathcal{T}_{\lambda,G}\text{ such that }\text{ts}(T)=s\}.
+\]
+Hence, we have
+\[
+[s_{\lambda}]X_G=\sum_{s\in S_k(G)}\sum_{T\in\mathcal{T}_{\lambda,G,s}}\mathrm{sgn}(T).
+\]
+For any $s\in S_k(G)$ and $T\in \mathcal{T}_{\lambda,G,s}$, we set $j$ to be the minimal index $1\le j \le k-1$ such that $v_j\le v_{j+1}$ (if it exists). We let $e_j$ denote an $N$-step from $v_j$ to $v_{j+1}$.
+
+Now, we define the map
+\begin{align*}
+\psi: \mathcal{T}_{\lambda,G,s} &\to \mathcal{T}_{\lambda,G,s}\\
+T &\mapsto T\Delta e_j,
+\end{align*}
+where $T\Delta e_j$ is the SRH $G$-tabloid obtained by removing $e_j$ if $e_j$ is already included in $T$ and adding $e_j$ otherwise.
+
+
+If $v_{j+1}$ is part of a hook, it must be of the form $v_{j+1}\le v_{j+2}\cdots\le v_{j+h}$ (read bottom to top). Thus, by transitivity of the underlying poset, $v_{j}\le v_{j+1}\le v_{j+2}\cdots\le v_{j+h}$ so $v_j$ may be added to the hook. Note that there are no $N$-steps below $v_j$ since that would contradict the minimality of $j$. 
+
+
+Since the sign of an SRH $G$-tabloid is given by the parity of the $N$-steps, we have that $\psi$ is a sign-reversing involution for any set $\mathcal{T}_{\lambda,G,s}$ on which it is defined. Therefore, whenever there exists a minimal $j$ such that $v_j\le v_{j+1}$ in the sequence $s$, we have
+\[
+\sum_{T\in\mathcal{T}_{\lambda,G,s}}\mathrm{sgn}(T)=0.
+\]
+We are thus left with the sums ranging over $\mathcal{T}_{\lambda,G,s}$ for which there is no index $j$ such that $v_j\le v_{j+1}$ in the sequence $s$. These sequences are precisely the non-increasing sequences of length $k$ in $G$. We conclude the desired formula holds. 
+\end{proof}
+\end{theorem}
+
+Now we can immediately apply the last proposition to derive a formula for the Schur coefficients of the chromatic symmetric functions of complete multipartite graphs $K_{(2^{\beta})}$, $\beta\ge 1$. As noted earlier, these graphs are incomparability graphs.
+
+
+We note that the following formula covers all Schur coefficients for the graphs $K_{(2^{\beta})}$. Since the independence number of $K_{(2^{\beta})}$ is $2$, it is impossible for a SRH $K_{(2^{\beta})}$-tabloid to have a hook of length 3 or greater by Lemma \ref{lemma:independence_lemma} and therefore impossible to have a row of length 3 or greater.
+
+\begin{proposition}
+\label{prop:form_two_partite_case}
+We have that:
+\[
+[s_{(2^C,1^D)}]X_{K_{(2^{\beta})}}=\frac{\beta !}{(\beta-C)!}\cdot N_{\mathrm{sp}}(K_{(2^{\beta-C})})
+\]
+for $C,D\ge 0$ such that $2C+D=2\beta$.
+\end{proposition}
+\begin{proof}
+Set $G=K_{(2^{\beta})}$. Note that we must have $2C+D=2\beta$ in order for the number of cells in the tabloids to match the number of vertices in $G$.
+
+
+For any $T\in \mathcal{T}_{(2^{\beta}),G}'$, the diagram is divided into the head, consisting of E-steps and the lower half consisting of the tail. We note that since the independence number of $G$ is $2$, by Lemma \ref{lemma:independence_lemma}, there are no hooks of length $3$ in the diagram. In particular, there cannot be a $N$-step up from the top of the tail to the bottom most row of length $2$.
+
+
+To fill the head of the diagram, we must select $C$ stable $2$-sets from $G$ and order them. Since $G$ is made up of $\beta$ stable $2$-sets to choose from, we have $\frac{\beta!}{(\beta-C)!}$ choices for this part of the diagram. 
+
+
+To fill the tail with vertices, we must choose a non-increasing sequence in $G$ through the remaining vertices of $G$. The vertices which remain form the subgraph $K_{(2^{\beta-C})}$. Hence, there are exactly $N_{\mathrm{sp}}(K_{(2^{\beta-C})}$ choices for the tail.
+
+
+Finally, we note that all SRH $G$-tabloids we have counted are positive as there are no $N$-steps in the top of the diagram nor the tail since the vertices in the tail form a non-increasing sequence in $G$. Thus, the desired formula holds.
+\end{proof}
+
+
+Now that we have determined a formula for the Schur coefficients of the chromatic symmetric function of $K_{2^{\beta}}$, $\beta\ge 1$, we can employ this formula to complete the classification of complete multipartite graphs in terms of Schur-positivity.
+
+
+\begin{theorem}
+\label{thm:K32_s_pos}
+ We have that $K_{(3,2^{\beta})}$ is Schur-positive for $\beta\ge 1$. Moreover, we have:
+\[
+[s_{(3,2^C,1^D)}]X_{K_{(3,2^{\beta})}}=[s_{(2^C,1^D)}]X_{K_{(2^{\beta})}}=\frac{\beta !}{(\beta-C)!}\cdot N_{\mathrm{sp}}(K_{(2^{\beta-C})})
+\]
+for $C,D\ge 0$ such that $2C+D=2\beta$. We also have:
+\begin{align*}
+[s_{(2^C,1^D)}]X_{K_{(3,2^{\beta})}}&=\frac{\beta !}{(\beta - C+1)!}\cdot \big((\beta-C+1)N_{\mathrm{sp}}(K_{(3,2^{\beta-C})})-N_{\mathrm{sp}}(K_{(2^{\beta-C+1})})\\
+&+(C+2)N_{\mathrm{sp}}(K_{(2^{\beta-C+1},1)})\big)
+\end{align*}
+for $C\ge 1,D\ge 1$ such that $2C+D=2\beta+3$. We note that if $\beta<C$, $N_{\mathrm{sp}}(K_{(3,2^{\beta-C})})$ is set to equal zero since the graph $K_{(3,2^{\beta-C})}$ does not exist. Lastly, we have:
+\[
+[s_{1^{2\beta+3}}]X_{K_{(3,2^{\beta})}}=N_{\mathrm{sp}}(K_{(3,2^{\beta})}).
+\]
+\end{theorem}
+\begin{proof}
+We first note that since the graphs $K_{(3,2^{\beta})}$, $\beta\ge 1$, are incomparability graphs, Proposition \ref{prop:inv_paths_tail} applies. Fix $G=K_{(3,2^{\beta})}$, $\beta\ge 1$. We divide the coefficients into several cases. Denote the three vertices in the unique stable $3$-set by $v_1\le v_2\le v_3$.
+\begin{enumerate}
+    \item Assume $\lambda=(3,2^C,1^D)$. Note that we must have $2C+D=2\beta$ in order for the number of cells in the tabloids to match the number of vertices in $G$.
+    
+    
+    For any $T\in \tilde{\mathcal{T}}_{\lambda,G}$, the row of length $3$ must be filled by the unique stable $3$-set in $G$. The remainder of the diagram must then be filled with the rest of the vertices which form a subgraph $K_{(2^{\beta})}$. Accordingly, these tabloids are in sign-preserving bijection with the tabloids in $\mathcal{T}_{(2^{C},1^D),K_{2^{\beta}}}'$. Hence the formula follows from Proposition \ref{prop:form_two_partite_case}.
+    % \item Assume $\lambda=(3,1^{\beta})$. The top row must be filled with an $EE$-hook consisting of $v_1,v_2,v_3$. It remains to choose a non-increasing sequence in $G$ through the rest of the vertices, yielding the desired formula. %don't need this case
+    \item Assume $\lambda=(2^C,1^D)$ for $C\ge 1$, $D\ge 1$. Note that we must have $2C+D=2\beta+3$ in order for the number of cells in the tabloids to match the number of vertices in $G$. We also observe that $D\ge 1$ must hold in order for there to be an odd number of cells in the diagram to match the odd number of vertices.
+    
+    In order to derive the desired formula, we consider several subcases for $T\in\mathcal{T}_{\lambda,G}'$. 
+    \begin{enumerate}[(a)]
+    \item First, $T$ may have no $N$-steps, in which case, the rows of length $2$ are all filled with E-steps. We note that $v_1,v_2,v_3$ may not all be in the head since they are adjacent to all other vertices and thus may not be placed in two stable $2$-sets. Again, we break into subcases.
+    \begin{enumerate}[(i)]
+        \item Assume $v_1,v_2,v_3$ are all in the tail. Then we choose $C$ ordered stable $2$-sets from the $\beta$ stable $2$-sets in the graph and a non-increasing sequence in $G$ through the remaining vertices. This yields:
+        \[
+        \frac{\beta !}{(\beta-C)!}\cdot N_{\mathrm{sp}}(K_{(3,2^{\beta-C})})
+        \]
+        positive SRH $G$-tabloids. We note that in the case where $D=1$, $\beta<C$ so the above term is set to equal zero. This is consistent with the impossibility of fitting three vertices in a tail of length $1$.
+        \item Assume one vertex $v_j$ from the stable $3$-set is in the tail. We have three choices for which vertex is $v_j$. We then choose $C-1$ ordered stable $2$-sets out of the $\beta$ total stable $2$-sets. Then, we choose a position for the hook with the other two vertices from the $3$-set, for which we have $C$ possibilities. Finally, we choose a non-increasing sequence in $G$ through the remaining vertices. This yields:
+        \[
+        3\cdot \frac{\beta!}{(\beta-C+1)!}\cdot C \cdot N_{\mathrm{sp}}(K_{(2^{h-C+1},1)})
+        \]
+        positive $SRH$ $G$-tabloids. It is impossible for there to be exactly two of the three vertices $v_1,v_2,v_3$ in the tail since that would leave one of the vertices in the head with no other vertex with which to form a stable $2$-set.
+    \end{enumerate}
+        \item Second, $T$ may have a $NE$-hook starting from the top vertex in the tail. The $N$-step in this hook must be the only $N$-step in the diagram since the rest of the head is filled with E-hooks and the tail is a non-increasing sequence in $G$. This hook must be filled by the unique stable $3$-set $\{v_1,v_2,v_3\}$. We thus must choose $C-1$ ordered stable $2$-sets and a non-increasing sequence through the remaining vertices. Note that a non-increasing sequence followed by $v_1$ must still be a non-increasing sequence since $v_1$ is incomparable to all vertices besides $v_2$ and $v_3$. Hence these tabloids remain in $\mathcal{T}_{(2^{C}1^{D}), G}'$. This yields:
+        \[
+        \frac{\beta !}{(\beta-C+1)!}N_{\mathrm{sp}}(K_{(2^{\beta-C+1})})
+        \]
+        negative SRH $G$-tabloids.
+        \item Third, $T$ may have an EN-hook, made up of $v_1,v_2,v_3$, somewhere in the head. As before, the $N$-step in this hook must be the only $N$-step in the diagram since the rest of the head is filled with $E$-hooks and the tail forms a non-increasing sequence. There are $C-1$ positions for the EN-hook. We then choose $C-2$ ordered stable $2$-sets from the $\beta$ total stable $2$-sets to fill the other rows in the head. Moreover, there must be a hook of length $1$ to the northwest of the EN-hook to complete the diagram. There are $2(h-C+2)$ vertices left to choose from for this hook. Finally, we choose a non-increasing sequence through the remaining vertices. This yields:
+        \[
+        (C-1)\cdot \frac{\beta !}{(\beta-C+2)!}\cdot 2\cdot (\beta-C+2)\cdot N_{\mathrm{sp}}(K_{(2^{\beta-C+1},1)})
+        \]
+        negative SRH $G$-tabloids.
+    \end{enumerate}
+    To derive the desired formula, we now compute the sum of all the above terms.
+    \begin{align*}
+        [s_{(2^C,1^D)}]X_{G}&=\frac{\beta !}{(\beta-C)!}\cdotN_{\mathrm{sp}}(K_{(3,2^{\beta-C})})+3\cdot \frac{\beta!}{(\beta-C+1)!}\cdot C \cdot N_{\mathrm{sp}}(K_{(2^{\beta-C+1},1)})\\
+        &-\frac{\beta !}{(\beta-C+1)!}N_{\mathrm{sp}}(K_{(2^{\beta-C+1})})\\
+        &-(C-1)\cdot \frac{\beta !}{(\beta-C+2)!}\cdot 2\cdot (\beta-C+2)\cdotN_{\mathrm{sp}}(K_{(2^{\beta-C+1},1)})\\
+        &=\frac{\beta!}{(\beta-C+1)!}\big((\beta-C+1)\cdotN_{\mathrm{sp}}(K_{(3,2^{\beta-C})})+3C\cdotN_{\mathrm{sp}}(K_{(2^{\beta-C+1},1)})\\
+        &-N_{\mathrm{sp}}(K_{(2^{\beta-C+1})})-(2C-2)\cdotN_{\mathrm{sp}}(K_{(2^{\beta-C+1},1)}\big)\\
+        &=\frac{\beta!}{(\beta-C+1)!}\big((\beta-C+1)\cdotN_{\mathrm{sp}}(K_{(3,2^{\beta-C})})+(2C+2)\cdotN_{\mathrm{sp}}(K_{(2^{\beta-C+1},1)})\\
+        &-N_{\mathrm{sp}}(K_{(2^{\beta-C+1})})\big)
+    \end{align*}
+    Since this formula has a negative term, it is necessary to prove it is always nonnegative in order to ensure Schur-positivity. To do so, we prove the inequality:
+    \[
+    N_{\mathrm{sp}}(K_{(2^{\beta-C+1},1)})\ge N_{\mathrm{sp}}(K_{(2^{\beta-C+1})}).
+    \]
+    We have that $K_{(2^{\beta-C+1},1)}$ is the incomparability graph of the poset consisting of $\beta-C+1$ disjoint chains of length $2$ and $1$ disjoint chain of length $1$. We label the vertex in the chain of length $1$ by $u$.
+    
+    Consider any non-increasing sequence $v_1\nleq\cdots\nleq v_h$ through all the vertices of $K_{2^{\beta-C+1}}$. We can map any such path to the non-increasing sequence $v_1\nleq\cdots\nleq v_h\nleq u$ since $u$ is incomparable to all other vertices. Hence, this injection implies the desired inequality.
+    
+    
+    \item Lastly, if $\lambda=1^{2\beta+3}$, by Proposition \ref{prop:inv_paths_tail}, the SRH $G$-tabloids are in bijection with the non-increasing sequences in $G$ so the desired formula follows.
+    
+    
+\end{enumerate}
+Since the independence number of $G$ is $3$ and there is one unique stable $3$-set, by Lemma \ref{lemma:independence_lemma}, the SRH $G$-tabloids we count may have at most one row of length $3$ (and no longer rows). Hence, cases 1, 2, 3, and 4 cover all possible partitions corresponding to nonzero coefficients.
+    
+    
+    
+\end{proof}
+
+Together with Theorem \ref{thm:only_K32_may_b_s_pos}, Theorem \ref{thm:K32_s_pos} provides the following Schur-positivity classification for complete multipartite graphs.
+
+\begin{theorem}
+\label{thm:classif}
+A complete multipartite graph $K_{\lambda}$ for $\ell(\lambda)\ge 2$ is Schur-positive if and only if $\lambda_i\in\{1,2\}$ for $1\le i \le k$ or $\lambda=(3,2^{\beta})$ for $\beta\ge 1$.
+\end{theorem}
+
+Proposition \ref{prop:only_balanced_partitions} also classifies most complete multipartite graphs in terms of $\mathbf{e}$-positivity (since graphs which are not Schur-positive are not $\mathbf{e}$-positive). The question of whether $K_{(3,2^{\beta})}$ ($\beta\ge 1$) is $\mathbf{e}$-positive, however, remains open.
+
+
+
+
+\bibliographystyle{siam}
+\bibliography{biblio}
+
+
+\end{document}
+
+%------------------------------------------------------------------------------
+% End of journal.tex
+%------------------------------------------------------------------------------
